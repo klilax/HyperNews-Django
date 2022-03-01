@@ -1,4 +1,6 @@
 import json
+import random
+from datetime import datetime
 from django.shortcuts import render
 from django.conf import settings
 from django.http.response import HttpResponse
@@ -27,6 +29,17 @@ class ServeNews(View):
             return render(request, self.template_name, {'news': render_news})
 
 
+class AddNews(View):
+    template_name = 'postNews.html'
+
+    def post(self, request):
+        title = request.POST.get('title')
+        text = request.POST.get('text')
+        cur_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+
+
 class ListNews(View):
     template_name = 'newsLinks.html'
 
@@ -37,7 +50,6 @@ class ListNews(View):
             for news in news_repository:
                 date = news['created'].split().pop(0)
                 time = news['created'].split().pop(1)
-                # link_str = "/news/" + str(news["link"]) + "/"
                 link_str = news["link"]
                 link = {"link": link_str, "title": news["title"], "time": time}
                 if date in news_link:
