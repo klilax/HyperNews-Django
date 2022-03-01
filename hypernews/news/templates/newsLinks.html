@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <h2>Hyper news</h2>
+    {% for key, value in news_list.items %}
+        <h4>{{ key }}</h4>
+        <ul>
+        {% for l in value %}
+            <li><a href="/news/{{ l.link }}/">{{ l.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+    <a href="/news/create/">create</a>
+
+</body>
+</html>

@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from news.views import Welcome
-from news.views import ServeNews
+from news.views import ServeNews, ListNews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Welcome.as_view()),
+    path('news/', ListNews.as_view()),
     re_path('news/(?P<link>\d+)', ServeNews.as_view()),
 ]
