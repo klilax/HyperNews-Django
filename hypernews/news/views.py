@@ -1,7 +1,7 @@
 import json
 import random
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.http.response import HttpResponse
 from django.views import View
@@ -29,15 +29,32 @@ class ServeNews(View):
             return render(request, self.template_name, {'news': render_news})
 
 
+def write_news(title, text):
+    random.seed(5)
+    date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    link = random.randint(1000, 99999)
+    new_news_str = '"created": "{}", "text": "{}", "title": "{}", "link": {}'.format(date, text, title, link)
+    new_news_str = ' {' + new_news_str + '}]'
+
+    with open(settings.NEWS_JSON_PATH, 'r', encoding='utf-8') as f:
+        news_repository = f.read()
+        news_repository = news_repository[:-1] + ',' + new_news_str
+        with open(settings.NEWS_JSON_PATH, 'w', encoding='utf-8') as w:
+            w.write(news_repository)
+
+
 class AddNews(View):
     template_name = 'postNews.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
 
     def post(self, request):
         title = request.POST.get('title')
         text = request.POST.get('text')
-        cur_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        write_news(title, text)
 
-
+        return redirect('/news/')
 
 
 class ListNews(View):

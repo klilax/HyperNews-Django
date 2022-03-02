@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    <form action="/news/create/" method="post">
+    <form action="/news/create/" method="post">{% csrf_token %}
         <label>
             <input type="text" name="title">
         </label>
@@ -14,7 +14,7 @@
         </label>
         <button type="submit">Submit</button>
     </form>
-    <a href="/news/create/">create</a>
+    <a href="/news/">Main page</a>
 
 </body>
 </html>
