@@ -17,13 +17,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, re_path
+from django.views.generic import RedirectView
 from news.views import Welcome
 from news.views import AddNews
 from news.views import ServeNews, ListNews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Welcome.as_view()),
+    path('', RedirectView.as_view(url='news/')),
     path('news/', ListNews.as_view()),
 
     path('news/create/', AddNews.as_view()),
