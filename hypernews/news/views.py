@@ -61,18 +61,37 @@ class ListNews(View):
     template_name = 'newsLinks.html'
 
     def get(self, request):
-        with open(settings.NEWS_JSON_PATH, 'r', encoding='utf-8') as json_file:
-            news_repository = json.load(json_file)
-            news_link = {}
-            for news in news_repository:
-                date = news['created'].split().pop(0)
-                time = news['created'].split().pop(1)
-                link_str = news["link"]
-                link = {"link": link_str, "title": news["title"], "time": time}
-                if date in news_link:
-                    news_link[date].append(link)
-                    news_link[date] = sorted(news_link[date], key=lambda i: i["time"], reverse=True)
-                else:
-                    news_link[date] = [link]
-            sorted_news = dict(sorted(news_link.items()))
-            return render(request, self.template_name, {"news_list": sorted_news})
+        query = request.GET.get('q')
+        if query is None:
+            with open(settings.NEWS_JSON_PATH, 'r', encoding='utf-8') as json_file:
+                news_repository = json.load(json_file)
+                news_link = {}
+                for news in news_repository:
+                    date = news['created'].split().pop(0)
+                    time = news['created'].split().pop(1)
+                    link_str = news["link"]
+                    link = {"link": link_str, "title": news["title"], "time": time}
+                    if date in news_link:
+                        news_link[date].append(link)
+                        news_link[date] = sorted(news_link[date], key=lambda i: i["time"], reverse=True)
+                    else:
+                        news_link[date] = [link]
+                sorted_news = dict(sorted(news_link.items()))
+                return render(request, self.template_name, {"news_list": sorted_news})
+        else:
+            with open(settings.NEWS_JSON_PATH, 'r', encoding='utf-8') as json_file:
+                news_repository = json.load(json_file)
+                news_link = {}
+                for news in news_repository:
+                    if query in news["title"]:
+                        date = news['created'].split().pop(0)
+                        time = news['created'].split().pop(1)
+                        link_str = news["link"]
+                        link = {"link": link_str, "title": news["title"], "time": time}
+                        if date in news_link:
+                            news_link[date].append(link)
+                            news_link[date] = sorted(news_link[date], key=lambda i: i["time"], reverse=True)
+                        else:
+                            news_link[date] = [link]
+                sorted_news = dict(sorted(news_link.items()))
+                return render(request, self.template_name, {"news_list": sorted_news})
