@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
 
     <h2>Hyper news</h2>
+    <form action="/news/" method="get">
+        <input type="text" name="q">
+        <button type="submit">Search</button>
+    </form>
     {% for key, value in news_list.items %}
         <h4>{{ key }}</h4>
         <ul>
